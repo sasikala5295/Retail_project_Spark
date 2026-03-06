@@ -1,15 +1,10 @@
-  df_transformed.createOrReplaceTempView("sales")
 
-  result = spark.sql("""
+CREATE OR REPLACE TABLE delta.`dbfs:/Volumes/workspace/default/input/gold`
+AS
 SELECT product,
        SUM(revenue) as total_revenue
-FROM sales
+FROM delta.`dbfs:/Volumes/workspace/default/input/silver`
 GROUP BY product
 ORDER BY total_revenue DESC
-""")
 
-result.show()
 
-result.write \
-    .mode("overwrite") \
-    .parquet("dbfs:/Volumes/workspace/default/input/output")
